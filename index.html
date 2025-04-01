@@ -39,7 +39,26 @@
     <div id="volume-value">0</div>
     <button id="start-button">Start</button>
     <button id="stop-button" disabled>Stop</button>
+    <button id="startButton">Start Microphone</button>
+    <div id="log">Logs will appear here...</div>
     <script>
+	// Function to log messages to the log div
+        function logMessage(message) {
+            const logDiv = document.getElementById('log');
+            const newMessage = document.createElement('p');
+            newMessage.textContent = message;
+            logDiv.appendChild(newMessage);
+            logDiv.scrollTop = logDiv.scrollHeight; // Scroll to the bottom
+        }
+        document.getElementById('startButton').addEventListener('click', () => {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    logMessage('Got MediaStream: ' + stream);
+                })
+                .catch(error => {
+                    logMessage('Error accessing microphone: ' + error);
+                });
+        });
         let audioContext;
         let analyser;
         let microphone;
